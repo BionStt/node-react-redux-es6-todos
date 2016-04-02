@@ -10,13 +10,13 @@ function todoApp(state = [], action) {
     switch (action.type) {
         case TOGGLE_TODO:
             return state.map((todo, index) => {
-                    if (index === action.id) {
-                        return Object.assign({}, todo, {
-                            completed: true
-                        });
-                    }
-                    return todo;
-                });
+                if (index === action.id) {
+                    return Object.assign({}, todo, {
+                        completed: true
+                    });
+                }
+                return todo;
+            });
         default:
             return state;
     }
