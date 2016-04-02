@@ -1,3 +1,2 @@
 export const TOGGLE_TODO = 'TOGGLE_TODO';
-
-export default function(){}
+export const ADD_TODO = 'ADD_TODO';

@@ -1,5 +1,14 @@
-import TOGGLE_TODO from '../constants';
+import * as constants from '../constants';
 import * as filterConstants from '../constants/filters';
+
+let nextTodoId = 0;
+export const addTodo = (text) => {
+    return {
+        type: constants.ADD_TODO,
+        id: nextTodoId++,
+        text
+    };
+};
 
 export const setVisibilityFilter = (filter) => {
     return {
@@ -10,7 +19,7 @@ export const setVisibilityFilter = (filter) => {
 
 export const toggleTodo = (id) => {
     return {
-        type: TOGGLE_TODO,
+        type: constants.TOGGLE_TODO,
         id
     };
 };

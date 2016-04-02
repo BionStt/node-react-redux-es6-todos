@@ -1,14 +1,15 @@
-var sampleData = [{ id: 0, text: "first", completed: false }, { id: 1, text: "second", completed: true }];
-
-import TOGGLE_TODO from '../constants';
+import * as constants from '../constants';
 
 function todoApp(state = [], action) {
-    if (!state.length) {
-        state = sampleData;
-    }
-
     switch (action.type) {
-        case TOGGLE_TODO:
+        case constants.ADD_TODO:
+            var newTodo = {
+                id: action.id,
+                text: action.text,
+                completed: false
+            };
+            return [...state, newTodo];
+        case constants.TOGGLE_TODO:
             return state.map((todo, index) => {
                 if (index === action.id) {
                     return Object.assign({}, todo, {
