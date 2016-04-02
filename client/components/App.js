@@ -1,12 +1,10 @@
 import React from 'react'
-
-import TodoList from './TodoList';
+import VisibleTodoList from '../containers/VisibleTodoList'
 
 const App = () => (
     <div>
         Todos app
-        <TodoList todos={[{text:"first", completed: false}, {text:"second", completed: true}]} />
-
+        <VisibleTodoList />
     </div>
 );
 
