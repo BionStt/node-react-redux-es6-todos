@@ -1,24 +1,33 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import config from './config';
 import routes from './router';
+import path from 'path';
 
 const app = express();
+const static_path = path.join(__dirname, 'public');
+
 
 app.use(bodyParser.json());
 
-app.use('/', routes);
+app.use('/', routes(app, static_path));
 
 
+var isDevelopment = (process.env.NODE_ENV !== 'production');
+console.log('is development:', isDevelopment);
 
-if (config.port) {
-    app.listen(config.port, null, null, (err) => {
+
+if (isDevelopment) {
+    var webpack = require('webpack');
+    var webpackConfig = require('./../webpack.config');
+    var WebpackDevServer = require('webpack-dev-server');
+
+    new WebpackDevServer(webpack(webpackConfig), {
+        publicPath: webpackConfig.output.publicPath,
+        hot: true
+    }).listen(3001, 'localhost', function (err, result) {
         if (err) {
-            console.error(err);
+            console.log(err)
         }
-        console.info('----\n==> API is running on port %s', config.port);
-        console.info('==> Send requests to http://%s:%s', config.host, config.port);
+        console.log('webpack-dev-server Listening at localhost:3001');
     });
-} else {
-    console.error('==>     ERROR: No PORT environment variable has been specified');
 }

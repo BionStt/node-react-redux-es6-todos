@@ -1,14 +1,14 @@
 var webpack = require('webpack');
 var path = require('path');
-var WriteFilePlugin = require('write-file-webpack-plugin');
 
 module.exports = {
+    devtool: 'source-map',
     entry: [
         './client/index.js'
     ],
     output: {
         path: path.join(__dirname, './dist/server/public/'),
-        publicPath: '/public/',
+        publicPath: '/',
         filename: 'bundle.js'
     },
     module: {
@@ -21,14 +21,15 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    devServer: {
-        contentBase: './',
-        outputPath: path.join(__dirname, './dist/server/public/')
-    },
     plugins: [
-        new WriteFilePlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            compress: {
+                warnings: false
+            }
+        }),
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"development"'
+            'process.env.NODE_ENV': '"production"'
         })
     ]
 };

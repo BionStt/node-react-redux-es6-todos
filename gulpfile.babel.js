@@ -7,10 +7,11 @@ import runSequence from 'run-sequence';
 const plugins = gulpLoadPlugins();
 
 const paths = {
-    js: ['./**/*.js', '!dist/**', '!node_modules/**'],
-    nonJs: ['./package.json', './.gitignore']
+    js: ['./**/*.js', '!dist/**', '!node_modules/**', '!client/**'],
+    ignoreFiles: ['!webpack.production.config.js', '!package.json', '!.gitignore', '!gulpfile.babel.js'],
+    nonJs: ['./package.json', './.gitignore'],
+    public: ['./server/public/index.html', './server/public/bundle.js']
 };
-
 
 
 // Clean up dist directory
@@ -28,9 +29,14 @@ gulp.task('set-env', () => {
 });
 
 
+gulp.task('copy-public', () =>
+    gulp.src(paths.public)
+        .pipe(gulp.dest('dist/server/public'))
+);
+
 
 // Copy non-js files to dist
-gulp.task('copy', () =>
+gulp.task('copy', ['copy-public'], () =>
     gulp.src(paths.nonJs)
         .pipe(plugins.newer('dist'))
         .pipe(gulp.dest('dist'))
@@ -38,7 +44,7 @@ gulp.task('copy', () =>
 
 // Compile ES6 to ES5 and copy to dist
 gulp.task('babel', () =>
-    gulp.src([...paths.js, '!gulpfile.babel.js'], { base: '.' })
+    gulp.src([...paths.js, ...paths.ignoreFiles], { base: '.' })
         .pipe(plugins.newer('dist'))
         .pipe(plugins.sourcemaps.init())
         .pipe(plugins.babel())
@@ -55,13 +61,11 @@ gulp.task('babel', () =>
 gulp.task('nodemon', ['copy', 'babel'], () =>
     plugins.nodemon({
         script: path.join('dist/server', 'index.js'),
-        ext: 'js',
         ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
-        tasks: ['copy', 'babel']
+        tasks: ['copy', 'babel'],
+        exec: "node --optimize_for_size --max_old_space_size=460 --gc_interval=100"
     })
 );
-
-
 
 // gulp serve for development
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
