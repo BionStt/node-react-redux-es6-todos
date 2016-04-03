@@ -19,15 +19,6 @@ gulp.task('clean', () =>
     del(['dist/**', '!dist'])
 );
 
-// Set env variables
-gulp.task('set-env', () => {
-    plugins.env({
-        vars: {
-            NODE_ENV: 'test'
-        }
-    });
-});
-
 
 gulp.task('copy-public', () =>
     gulp.src(paths.public)
