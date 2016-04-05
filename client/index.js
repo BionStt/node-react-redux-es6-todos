@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import ReduxPromise from 'redux-promise';
+import axios from 'axios';
 
 import App from './components/App';
 import reducers from './reducers';
+import { SHOW_ALL } from './constants/filters';
 
-// const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
-
-import * as filterConstants from './constants/filters';
-import axios from 'axios';
+import { setNextId }  from './actions';
 
 var todos = axios.get('/todos')
     .then(initStore)
@@ -23,7 +22,7 @@ function initStore(response) {
 
     var initialState = {
         todos: response.data,
-        visibilityFilter: filterConstants.SHOW_ALL
+        visibilityFilter: SHOW_ALL
     };
 
     const store = createStore(
@@ -32,10 +31,15 @@ function initStore(response) {
         applyMiddleware(ReduxPromise)
     );
 
+    if (initialState.todos && initialState.todos.length > 0) {
+        setNextId(initialState.todos[initialState.todos.length - 1].id);
+    }
+
     ReactDOM.render(
         <Provider store={store}>
             <App></App>
         </Provider>,
         document.getElementById('mainContainer')
     );
+
 }

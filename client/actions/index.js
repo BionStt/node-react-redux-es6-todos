@@ -1,11 +1,17 @@
 import * as constants from '../constants';
 import * as filterConstants from '../constants/filters';
 
-let nextTodoId = 0;
+export var nextTodoId = 0;
+
+export function setNextId(id){
+    nextTodoId = id;
+    return id;
+}
+
 export const addTodo = (text) => {
     return {
         type: constants.ADD_TODO,
-        id: nextTodoId++,
+        id: nextTodoId + 1,
         text
     };
 };
