@@ -21,6 +21,17 @@ function updateTodo(todo) {
         });
 }
 
+
+function deleteTodo(id) {
+    axios.delete(`/todos/${id}`)
+        .then(function (response) {
+            //console.log(response);
+        })
+        .catch(function (response) {
+            console.log('deleteTodo:', response);
+        });
+}
+
 function todo(state, action) {
     switch (action.type) {
         case constants.ADD_TODO:
@@ -41,7 +52,6 @@ function todo(state, action) {
             });
             updateTodo(newObject);
             return newObject;
-
         default:
             return state;
     }
@@ -56,6 +66,15 @@ function todos(state = [], action) {
             return state.map(t =>
                 todo(t, action)
             );
+        case constants.DELETE_TODO:
+            return state.filter(t => {
+                if (t.id === action.id) {
+                    deleteTodo(action.id);
+                    return false;
+                }
+                return true;
+            });
+
         default:
             return state;
     }

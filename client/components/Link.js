@@ -1,19 +1,22 @@
 import React, { PropTypes } from 'react'
 
-const Link = ({ active, children, onClick }) => {
+const Link = ({ active, className, children, onClick }) => {
     if (active) {
-        return <span>{children}</span>
+        var buttonClassName = `${className} active`;
+        return ( <button className={buttonClassName}>
+            {children}
+        </button>);
     }
 
     return (
-        <a href="#"
-           onClick={e => {
+        <button className={className}
+                onClick={e => {
          e.preventDefault();
          onClick();
        }}
         >
             {children}
-        </a>
+        </button>
     )
 };
 

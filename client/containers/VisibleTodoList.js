@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { toggleTodo } from '../actions'
+import { toggleTodo, deleteTodo } from '../actions'
 import TodoList from '../components/TodoList'
 
 import * as filterConstants from '../constants/filters';
@@ -25,6 +25,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onTodoClick: (id) => {
             dispatch(toggleTodo(id))
+        },
+        onDelClick: (id) => {
+            dispatch(deleteTodo(id))
         }
     }
 };
